@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/screens/detail_page.dart';
 import '../models/restaurant.dart';
 
 class CustomCardHome extends StatelessWidget {
@@ -16,7 +17,8 @@ class CustomCardHome extends StatelessWidget {
       child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            debugPrint('Card tapped. ${restaurants.name}');
+            Navigator.pushNamed(context, DetailPage.routeName,
+                arguments: restaurants);
           },
           child: SizedBox(
             width: 300,

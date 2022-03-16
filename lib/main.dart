@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/models/restaurant.dart';
+import 'package:restaurant_app/screens/detail_page.dart';
 import 'screens/home_page.dart';
 
 void main() {
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (context) => HomePage(),
+        DetailPage.routeName: (context) => DetailPage(
+            restaurant:
+                ModalRoute.of(context)?.settings.arguments as Restaurant)
       },
     );
   }
