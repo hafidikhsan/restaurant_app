@@ -9,31 +9,33 @@ class CustomCardHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: Colors.amber,
-      clipBehavior: Clip.antiAlias,
-      elevation: 10,
-      child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            Navigator.pushNamed(context, DetailPage.routeName,
-                arguments: restaurants);
-          },
-          child: SizedBox(
-            width: 300,
-            height: 280,
-            child: Column(
-              children: <Widget>[
-                Expanded(flex: 3, child: _CustomImage()),
-                Expanded(flex: 2, child: _CustomDescription()),
-              ],
-            ),
-          )),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        clipBehavior: Clip.antiAlias,
+        elevation: 10,
+        child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () {
+              Navigator.pushNamed(context, DetailPage.routeName,
+                  arguments: restaurants);
+            },
+            child: SizedBox(
+              width: 300,
+              height: 280,
+              child: Column(
+                children: <Widget>[
+                  Expanded(flex: 8, child: _customImage()),
+                  Expanded(flex: 7, child: _customDescription(context)),
+                ],
+              ),
+            )),
+      ),
     );
   }
 
-  Widget _CustomImage() {
+  Widget _customImage() {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -41,7 +43,7 @@ class CustomCardHome extends StatelessWidget {
     );
   }
 
-  Widget _CustomDescription() {
+  Widget _customDescription(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(12),
       child: Row(
@@ -56,11 +58,10 @@ class CustomCardHome extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      restaurants.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    Text(restaurants.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline6),
                     Text(
                       restaurants.city,
                       maxLines: 1,
@@ -68,11 +69,10 @@ class CustomCardHome extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  restaurants.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(restaurants.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.caption),
               ],
             ),
           ),
