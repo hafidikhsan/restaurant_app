@@ -11,6 +11,8 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantListState extends State<RestaurantList> {
+  bool _short = false;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Restaurant>>(
@@ -22,7 +24,10 @@ class _RestaurantListState extends State<RestaurantList> {
           newsListSliver = SliverList(
               delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              final restaurantsData = data![index];
+              (_short)
+                  ? data!.sort(((a, b) => b.rating.compareTo(a.rating)))
+                  : data![index];
+              final restaurantsData = data[index];
               return CustomCardHome(
                 restaurants: restaurantsData,
               );
@@ -38,11 +43,43 @@ class _RestaurantListState extends State<RestaurantList> {
           slivers: <Widget>[
             _appBar(context),
             SliverToBoxAdapter(child: _title(context)),
+            SliverToBoxAdapter(child: _shortButton(context)),
             newsListSliver,
           ],
         );
       },
     );
+  }
+
+  Widget _shortButton(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: SizedBox(
+          height: 40.0,
+          child: OutlinedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0))),
+            ),
+            onPressed: () {
+              setState(() {
+                _short = !_short;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const <Widget>[
+                Icon(
+                  Icons.filter_list,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text('Urutkan Rating'),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _appBar(BuildContext context) {

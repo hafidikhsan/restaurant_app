@@ -79,16 +79,16 @@ class _SearchListState extends State<SearchList> {
         });
   }
 
-  Widget _listData(BuildContext context, List<Restaurant> Data) {
+  Widget _listData(BuildContext context, List<Restaurant> dataList) {
     return SliverList(
         delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
-        final restaurantsData = Data[index];
+        final restaurantsData = dataList[index];
         return SearchCard(
           restaurants: restaurantsData,
         );
       },
-      childCount: Data.length,
+      childCount: dataList.length,
     ));
   }
 
