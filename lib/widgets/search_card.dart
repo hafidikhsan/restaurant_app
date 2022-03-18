@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 
-class CustomCardHome extends StatelessWidget {
+class SearchCard extends StatelessWidget {
   final Restaurant restaurants;
-
-  const CustomCardHome({Key? key, required this.restaurants}) : super(key: key);
+  const SearchCard({Key? key, required this.restaurants}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +22,11 @@ class CustomCardHome extends StatelessWidget {
             },
             child: SizedBox(
               width: 300,
-              height: 280,
-              child: Column(
+              height: 120,
+              child: Row(
                 children: <Widget>[
-                  Expanded(flex: 8, child: _customImage(context)),
-                  Expanded(flex: 7, child: _customDescription(context)),
+                  Expanded(flex: 4, child: _customImage(context)),
+                  Expanded(flex: 8, child: _customDescription(context)),
                 ],
               ),
             )),
@@ -81,7 +80,7 @@ class CustomCardHome extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.star,
-                  size: 26.0,
+                  size: 16.0,
                 ),
                 Text(
                   restaurants.rating.toString(),

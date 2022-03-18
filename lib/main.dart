@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/screens/home_page.dart';
+import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/styles/styles.dart';
 
 void main() {
@@ -29,11 +30,12 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.grey,
         ),
         // Target Platform
-        //platform: TargetPlatform.iOS,
+        platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (context) => const HomePage(),
+        SearchPage.routeName: (context) => const SearchPage(),
         DetailPage.routeName: (context) => DetailPage(
             restaurants:
                 ModalRoute.of(context)?.settings.arguments as Restaurant)

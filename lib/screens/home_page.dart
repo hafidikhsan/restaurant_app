@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
 import 'package:restaurant_app/screens/list_page.dart';
 
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _listWidget = [
     const ListPage(),
-    const Placeholder(),
+    const SearchPage(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
