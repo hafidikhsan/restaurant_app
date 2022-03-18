@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import '../models/restaurant.dart';
@@ -26,7 +28,7 @@ class CustomCardHome extends StatelessWidget {
               height: 280,
               child: Column(
                 children: <Widget>[
-                  Expanded(flex: 8, child: _customImage()),
+                  Expanded(flex: 8, child: _customImage(context)),
                   Expanded(flex: 7, child: _customDescription(context)),
                 ],
               ),
@@ -35,7 +37,7 @@ class CustomCardHome extends StatelessWidget {
     );
   }
 
-  Widget _customImage() {
+  Widget _customImage(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -45,7 +47,7 @@ class CustomCardHome extends StatelessWidget {
 
   Widget _customDescription(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -79,7 +81,7 @@ class CustomCardHome extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.star,
                   size: 26.0,
                 ),

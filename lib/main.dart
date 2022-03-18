@@ -29,13 +29,13 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.grey,
         ),
         // Target Platform
-        platform: TargetPlatform.iOS,
+        //platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (context) => const HomePage(),
         DetailPage.routeName: (context) => DetailPage(
-            restaurant:
+            restaurants:
                 ModalRoute.of(context)?.settings.arguments as Restaurant)
       },
     );
