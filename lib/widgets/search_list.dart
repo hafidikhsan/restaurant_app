@@ -38,26 +38,15 @@ class _SearchListState extends State<SearchList> {
           final data = snapshot.data;
           if (snapshot.hasData) {
             rows = data!;
+          } else if (snapshot.hasError) {
+            (defaultTargetPlatform == TargetPlatform.android)
+                ? _alertDataAndroid(
+                    context, 'Aduh, Restoran yang kamu cari tidak ada')
+                : _alertIos(context, 'Aduh, Restoran yang kamu cari tidak ada');
           }
           return CustomScrollView(
             slivers: <Widget>[
-              const SliverAppBar(
-                pinned: true,
-                title: Text("Pencarian"),
-                backgroundColor: Color.fromARGB(255, 30, 47, 92),
-                flexibleSpace: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromARGB(255, 42, 66, 131),
-                        Color.fromARGB(255, 30, 47, 92)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              _appBar(context),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -83,29 +72,43 @@ class _SearchListState extends State<SearchList> {
                 ),
               ),
               (results.isEmpty)
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final restaurantsData = rows[index];
-                        return SearchCard(
-                          restaurants: restaurantsData,
-                        );
-                      },
-                      childCount: rows.length,
-                    ))
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final restaurantsData = results[index];
-                        return SearchCard(
-                          restaurants: restaurantsData,
-                        );
-                      },
-                      childCount: results.length,
-                    ))
+                  ? _listData(context, rows)
+                  : _listData(context, results)
             ],
           );
         });
+  }
+
+  Widget _listData(BuildContext context, List<Restaurant> Data) {
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+      (BuildContext context, int index) {
+        final restaurantsData = Data[index];
+        return SearchCard(
+          restaurants: restaurantsData,
+        );
+      },
+      childCount: Data.length,
+    ));
+  }
+
+  Widget _appBar(BuildContext context) {
+    return SliverAppBar(
+      centerTitle: false,
+      pinned: true,
+      title: const Text("Pencarian"),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+              Color.fromARGB(255, 42, 66, 131),
+              Color.fromARGB(255, 30, 47, 92)
+            ]))),
+      ),
+    );
   }
 
   void setResults(String query) {
@@ -115,47 +118,56 @@ class _SearchListState extends State<SearchList> {
         .toList();
     if (results.isEmpty) {
       (defaultTargetPlatform == TargetPlatform.android)
-          ? showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Center(
-                      child:
-                          Icon(Icons.sentiment_very_dissatisfied, size: 50.0)),
-                  content: const Text(
-                      'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Ok'),
-                    ),
-                  ],
-                );
-              },
-            )
-          : showCupertinoDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (context) {
-                return CupertinoAlertDialog(
-                  title: const Center(
-                      child: Icon(CupertinoIcons.multiply_circle_fill,
-                          size: 50.0)),
-                  content: const Text(
-                      'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya'),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text('Ok'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
+          ? _alertDataAndroid(context,
+              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya')
+          : _alertIos(context,
+              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya');
     }
+  }
+
+  void _alertDataAndroid(
+    BuildContext context,
+    String s,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(
+              child: Icon(Icons.sentiment_very_dissatisfied, size: 50.0)),
+          content: Text(s),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _alertIos(BuildContext context, String s) {
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Center(
+              child: Icon(CupertinoIcons.multiply_circle_fill, size: 50.0)),
+          content: Text(s),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

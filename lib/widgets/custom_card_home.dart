@@ -12,7 +12,8 @@ class CustomCardHome extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         clipBehavior: Clip.antiAlias,
         elevation: 10,
         child: InkWell(
@@ -22,8 +23,8 @@ class CustomCardHome extends StatelessWidget {
                   arguments: restaurants);
             },
             child: SizedBox(
-              width: 300,
-              height: 280,
+              width: 300.0,
+              height: 280.0,
               child: Column(
                 children: <Widget>[
                   Expanded(flex: 8, child: _customImage(context)),
@@ -45,7 +46,7 @@ class CustomCardHome extends StatelessWidget {
 
   Widget _customDescription(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -62,10 +63,21 @@ class CustomCardHome extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6),
-                    Text(
-                      restaurants.city,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.place,
+                          size: 20.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(
+                            restaurants.city,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

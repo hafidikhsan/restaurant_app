@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 
@@ -24,7 +22,11 @@ class _DetailListState extends State<DetailList> {
       slivers: <Widget>[
         SliverAppBar(
           pinned: true,
-          title: Text(widget.restaurant.name),
+          title: Text(
+            widget.restaurant.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           centerTitle: false,
           expandedHeight: 200.0,
           backgroundColor: const Color.fromARGB(255, 30, 47, 92),

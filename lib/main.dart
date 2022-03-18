@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
             ),
         textTheme: myTextTheme,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.grey,
         ),
         // Target Platform
-        platform: TargetPlatform.iOS,
+        //platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final Color primaryColor = Color.fromARGB(255, 30, 47, 92);
-final Color secondaryColor = Color(0xFFFFFFFF);
+const Color primaryColor = Color.fromARGB(255, 30, 47, 92);
+const Color secondaryColor = Color(0xFFFFFFFF);
 
 final TextTheme myTextTheme = TextTheme(
   headline1: GoogleFonts.poppins(

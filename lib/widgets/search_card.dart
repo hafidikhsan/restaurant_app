@@ -21,8 +21,8 @@ class SearchCard extends StatelessWidget {
                   arguments: restaurants);
             },
             child: SizedBox(
-              width: 300,
-              height: 120,
+              width: 300.0,
+              height: 120.0,
               child: Row(
                 children: <Widget>[
                   Expanded(flex: 4, child: _customImage(context)),
@@ -44,7 +44,7 @@ class SearchCard extends StatelessWidget {
 
   Widget _customDescription(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -61,10 +61,21 @@ class SearchCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6),
-                    Text(
-                      restaurants.city,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.place,
+                          size: 18.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(
+                            restaurants.city,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
