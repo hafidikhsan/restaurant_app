@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
-import 'screens/home_page.dart';
-import 'styles/styles.dart';
+import 'package:restaurant_app/screens/home_page.dart';
+import 'package:restaurant_app/styles/styles.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +24,12 @@ class MyApp extends StatelessWidget {
             ),
         textTheme: myTextTheme,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.grey,
+        ),
+        // Target Platform
+        platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {
