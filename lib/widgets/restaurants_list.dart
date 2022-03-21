@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/models/restaurant.dart';
-import 'package:restaurant_app/services/restaurant_service.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/widgets/custom_card_home.dart';
+import 'package:restaurant_app/providers/restaurants_provider.dart';
 
 class RestaurantList extends StatefulWidget {
   const RestaurantList({Key? key}) : super(key: key);
@@ -15,49 +15,55 @@ class _RestaurantListState extends State<RestaurantList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Restaurant>>(
-      future: loadProduct(),
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        Widget newsListSliver;
-        if (snapshot.hasData) {
-          newsListSliver = SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              (_short)
-                  ? data!.sort(((a, b) => b.rating.compareTo(a.rating)))
-                  : data![index];
-              final restaurantsData = data[index];
-              return CustomCardHome(
-                restaurants: restaurantsData,
-              );
-            },
-            childCount: data!.length,
-          ));
-        } else {
-          newsListSliver = const SliverToBoxAdapter(
+    return Consumer<RestaurantsProvider>(
+      builder: (context, state, _) {
+        if (state.state == ResultState.loading) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state.state == ResultState.hasData) {
+          return CustomScrollView(
+            slivers: <Widget>[
+              _appBar(context),
+              SliverToBoxAdapter(
+                child: _title(context),
+              ),
+              SliverToBoxAdapter(
+                child: _shortButton(context),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    (_short)
+                        ? state.result.restaurants
+                            .sort(((a, b) => b.rating.compareTo(a.rating)))
+                        : state.result.restaurants[index];
+                    var restaurantsData = state.result.restaurants[index];
+                    return CustomCardHome(
+                      restaurants: restaurantsData,
+                    );
+                  },
+                  childCount: state.result.restaurants.length,
+                ),
+              ),
+            ],
+          );
+        } else if (state.state == ResultState.noData) {
+          return SliverToBoxAdapter(child: Center(child: Text(state.message)));
+        } else if (state.state == ResultState.error) {
+          return SliverToBoxAdapter(child: Center(child: Text(state.message)));
+        } else {
+          return const SliverToBoxAdapter(child: Center(child: Text('')));
         }
-        return CustomScrollView(
-          slivers: <Widget>[
-            _appBar(context),
-            SliverToBoxAdapter(
-              child: _title(context),
-            ),
-            SliverToBoxAdapter(
-              child: _shortButton(context),
-            ),
-            newsListSliver,
-          ],
-        );
       },
     );
   }
 
   Widget _shortButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10.0,
+      ),
       child: SizedBox(
         height: 40.0,
         child: OutlinedButton(
@@ -69,6 +75,7 @@ class _RestaurantListState extends State<RestaurantList> {
             ),
           ),
           onPressed: () {
+            print(_short);
             setState(
               () {
                 _short = !_short;

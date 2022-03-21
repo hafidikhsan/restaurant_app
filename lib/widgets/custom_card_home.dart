@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
-import 'package:restaurant_app/models/restaurant.dart';
+import 'package:restaurant_app/models/api/restaurant.dart';
 
 class CustomCardHome extends StatelessWidget {
   final Restaurant restaurants;
@@ -11,10 +11,14 @@ class CustomCardHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15.0,
+        vertical: 5.0,
+      ),
       child: Card(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         clipBehavior: Clip.antiAlias,
         elevation: 10,
         child: InkWell(
@@ -56,7 +60,8 @@ class CustomCardHome extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(restaurants.pictureId),
+          image: NetworkImage(
+              "https://restaurant-api.dicoding.dev/images/small/${restaurants.pictureId}"),
           fit: BoxFit.cover,
         ),
       ),

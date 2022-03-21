@@ -1,8 +1,12 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/providers/bottom_navigation.dart';
 import 'package:restaurant_app/screens/search_page.dart';
+import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
+import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/screens/list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +19,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _bottomNavIndex = 0;
-
   static const String _homeTitle = 'Home';
 
   final List<Widget> _listWidget = [
-    const ListPage(),
+    ChangeNotifierProvider(
+      create: (_) => RestaurantsProvider(
+        apiServices: ApiServices(),
+      ),
+      child: const ListPage(),
+    ),
     const SearchPage(),
   ];
 
@@ -35,12 +42,6 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  void _onBottomNavTapped(int index) {
-    setState(() {
-      _bottomNavIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -50,12 +51,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return Scaffold(
-      body: _listWidget[_bottomNavIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _bottomNavIndex,
-        items: _bottomNavBarItems,
-        onTap: _onBottomNavTapped,
+    return ChangeNotifierProvider<BottomNavigationBarProvider>(
+      create: (BuildContext context) => BottomNavigationBarProvider(),
+      child: Consumer<BottomNavigationBarProvider>(
+        builder: (contex, bottomNavigation, _) => Scaffold(
+          body: _listWidget[bottomNavigation.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: bottomNavigation.currentIndex,
+            items: _bottomNavBarItems,
+            onTap: (newValue) {
+              bottomNavigation.currentIndex = newValue;
+            },
+          ),
+        ),
       ),
     );
   }

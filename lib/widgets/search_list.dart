@@ -41,8 +41,13 @@ class _SearchListState extends State<SearchList> {
         } else if (snapshot.hasError) {
           (defaultTargetPlatform == TargetPlatform.android)
               ? _alertDataAndroid(
-                  context, 'Aduh, Restoran yang kamu cari tidak ada')
-              : _alertIos(context, 'Aduh, Restoran yang kamu cari tidak ada');
+                  context,
+                  'Aduh, Restoran yang kamu cari tidak ada',
+                )
+              : _alertIos(
+                  context,
+                  'Aduh, Restoran yang kamu cari tidak ada',
+                );
         }
         return CustomScrollView(
           slivers: <Widget>[
@@ -67,8 +72,10 @@ class _SearchListState extends State<SearchList> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                  vertical: 5.0,
+                ),
                 child: Text(
                   "Hasil Pencarian",
                   style: Theme.of(context).textTheme.headline5,
@@ -127,10 +134,14 @@ class _SearchListState extends State<SearchList> {
         .toList();
     if (results.isEmpty) {
       (defaultTargetPlatform == TargetPlatform.android)
-          ? _alertDataAndroid(context,
-              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya')
-          : _alertIos(context,
-              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya');
+          ? _alertDataAndroid(
+              context,
+              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya',
+            )
+          : _alertIos(
+              context,
+              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya',
+            );
     }
   }
 
@@ -143,7 +154,10 @@ class _SearchListState extends State<SearchList> {
       builder: (context) {
         return AlertDialog(
           title: const Center(
-            child: Icon(Icons.sentiment_very_dissatisfied, size: 50.0),
+            child: Icon(
+              Icons.sentiment_very_dissatisfied,
+              size: 50.0,
+            ),
           ),
           content: Text(s),
           actions: [
@@ -166,7 +180,10 @@ class _SearchListState extends State<SearchList> {
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Center(
-            child: Icon(CupertinoIcons.multiply_circle_fill, size: 50.0),
+            child: Icon(
+              CupertinoIcons.multiply_circle_fill,
+              size: 50.0,
+            ),
           ),
           content: Text(s),
           actions: [

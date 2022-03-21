@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/models/restaurant.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/models/api/restaurant.dart';
+import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/detail_list.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
+import 'package:restaurant_app/providers/detail_provider.dart';
 
 class DetailPage extends StatefulWidget {
   static var routeName = '/detail_restaurant';
@@ -18,24 +21,30 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
+    return ChangeNotifierProvider<RestaurantsDetailProvider>(
+      create: (_) => RestaurantsDetailProvider(
+        restaurantId: widget.restaurants.id,
+        apiServices: ApiServices(),
+      ),
+      child: PlatformWidget(
+        androidBuilder: _buildAndroid,
+        iosBuilder: _buildIos,
+      ),
     );
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return Scaffold(
-        body: DetailList(
-      restaurant: widget.restaurants,
-    ));
+    return const Scaffold(
+      body: DetailList(),
+    );
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: DetailList(
-        restaurant: widget.restaurants,
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
       ),
+      child: DetailList(),
     );
   }
 }
