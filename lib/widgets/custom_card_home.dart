@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 
@@ -17,21 +18,36 @@ class CustomCardHome extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         elevation: 10,
         child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              Navigator.pushNamed(context, DetailPage.routeName,
-                  arguments: restaurants);
-            },
-            child: SizedBox(
-              width: 300.0,
-              height: 280.0,
-              child: Column(
-                children: <Widget>[
-                  Expanded(flex: 8, child: _customImage(context)),
-                  Expanded(flex: 7, child: _customDescription(context)),
-                ],
-              ),
-            )),
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              DetailPage.routeName,
+              arguments: restaurants,
+            );
+          },
+          child: SizedBox(
+            width: 300.0,
+            height: 280.0,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  flex: 8,
+                  child: (defaultTargetPlatform == TargetPlatform.android)
+                      ? Hero(
+                          tag: restaurants.pictureId,
+                          child: _customImage(context),
+                        )
+                      : _customImage(context),
+                ),
+                Expanded(
+                  flex: 7,
+                  child: _customDescription(context),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -39,8 +55,11 @@ class CustomCardHome extends StatelessWidget {
   Widget _customImage(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(restaurants.pictureId), fit: BoxFit.cover)),
+        image: DecorationImage(
+          image: NetworkImage(restaurants.pictureId),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
@@ -59,10 +78,12 @@ class CustomCardHome extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(restaurants.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6),
+                    Text(
+                      restaurants.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                     Row(
                       children: [
                         const Icon(
@@ -81,10 +102,12 @@ class CustomCardHome extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(restaurants.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption),
+                Text(
+                  restaurants.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ],
             ),
           ),

@@ -42,8 +42,12 @@ class _RestaurantListState extends State<RestaurantList> {
         return CustomScrollView(
           slivers: <Widget>[
             _appBar(context),
-            SliverToBoxAdapter(child: _title(context)),
-            SliverToBoxAdapter(child: _shortButton(context)),
+            SliverToBoxAdapter(
+              child: _title(context),
+            ),
+            SliverToBoxAdapter(
+              child: _shortButton(context),
+            ),
             newsListSliver,
           ],
         );
@@ -53,33 +57,39 @@ class _RestaurantListState extends State<RestaurantList> {
 
   Widget _shortButton(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: SizedBox(
-          height: 40.0,
-          child: OutlinedButton(
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0))),
-            ),
-            onPressed: () {
-              setState(() {
-                _short = !_short;
-              });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Icon(
-                  Icons.filter_list,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text('Urutkan Rating'),
-                ),
-              ],
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: SizedBox(
+        height: 40.0,
+        child: OutlinedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
             ),
           ),
-        ));
+          onPressed: () {
+            setState(
+              () {
+                _short = !_short;
+              },
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              Icon(
+                Icons.filter_list,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Text('Urutkan Rating'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _appBar(BuildContext context) {
@@ -89,14 +99,17 @@ class _RestaurantListState extends State<RestaurantList> {
       title: const Text("Restaurant App"),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-              Color.fromARGB(255, 42, 66, 131),
-              Color.fromARGB(255, 30, 47, 92)
-            ]))),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 42, 66, 131),
+                Color.fromARGB(255, 30, 47, 92),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -121,8 +134,9 @@ class _RestaurantListState extends State<RestaurantList> {
           _titleText(context, "Selamat Datang", "headline5"),
           _titleText(context, "Hafid Ikhsan Arifin", "headline4"),
           Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: _titleText(context, "Makan apa hari ini?", "subtitle1")),
+            padding: const EdgeInsets.only(top: 15.0),
+            child: _titleText(context, "Makan apa hari ini?", "subtitle1"),
+          ),
         ],
       ),
     );

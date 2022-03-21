@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/restaurant.dart';
 
@@ -37,34 +38,49 @@ class _DetailListState extends State<DetailList> {
                 end: Alignment.bottomRight,
                 colors: [
                   Color.fromARGB(255, 42, 66, 131),
-                  Color.fromARGB(255, 30, 47, 92)
+                  Color.fromARGB(255, 30, 47, 92),
                 ],
               ),
             ),
-            child: FlexibleSpaceBar(background: _detailHero(context)),
+            child: FlexibleSpaceBar(
+              background: (defaultTargetPlatform == TargetPlatform.android)
+                  ? Hero(
+                      tag: widget.restaurant.pictureId,
+                      child: _detailHero(context),
+                    )
+                  : _detailHero(context),
+            ),
           ),
         ),
-        SliverToBoxAdapter(child: _detailDescription(context)),
-        SliverToBoxAdapter(child: _menuTitle(context, "Foods")),
+        SliverToBoxAdapter(
+          child: _detailDescription(context),
+        ),
+        SliverToBoxAdapter(
+          child: _menuTitle(context, "Foods"),
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return _detailMenu(
-                  context,
-                  widget.restaurant.menus.foods[index].name,
-                  'assets/images/food.jpg');
+                context,
+                widget.restaurant.menus.foods[index].name,
+                'assets/images/food.jpg',
+              );
             },
             childCount: foodList,
           ),
         ),
-        SliverToBoxAdapter(child: _menuTitle(context, "Drinks")),
+        SliverToBoxAdapter(
+          child: _menuTitle(context, "Drinks"),
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return _detailMenu(
-                  context,
-                  widget.restaurant.menus.drinks[index].name,
-                  'assets/images/drink.jpeg');
+                context,
+                widget.restaurant.menus.drinks[index].name,
+                'assets/images/drink.jpeg',
+              );
             },
             childCount: drinkList,
           ),
@@ -76,9 +92,11 @@ class _DetailListState extends State<DetailList> {
   Widget _detailHero(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(widget.restaurant.pictureId),
-              fit: BoxFit.cover)),
+        image: DecorationImage(
+          image: NetworkImage(widget.restaurant.pictureId),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
@@ -88,10 +106,12 @@ class _DetailListState extends State<DetailList> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.restaurant.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headline5),
+          Text(
+            widget.restaurant.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.headline5,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -111,21 +131,25 @@ class _DetailListState extends State<DetailList> {
                 padding: const EdgeInsets.only(top: 15.0),
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _desc = !_desc;
-                    });
+                    setState(
+                      () {
+                        _desc = !_desc;
+                      },
+                    );
                   },
                   child: (_desc)
-                      ? Text("Sembunyikan",
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!
-                              .merge(const TextStyle(color: Colors.blue)))
-                      : Text("Selengkapnya",
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!
-                              .merge(const TextStyle(color: Colors.blue))),
+                      ? Text(
+                          "Sembunyikan",
+                          style: Theme.of(context).textTheme.caption!.merge(
+                                const TextStyle(color: Colors.blue),
+                              ),
+                        )
+                      : Text(
+                          "Selengkapnya",
+                          style: Theme.of(context).textTheme.caption!.merge(
+                                const TextStyle(color: Colors.blue),
+                              ),
+                        ),
                 ),
               ),
             ],
@@ -135,11 +159,13 @@ class _DetailListState extends State<DetailList> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                    child: _detaiRatingCity(
-                        context, widget.restaurant.rating.toString(), "star")),
+                  child: _detaiRatingCity(
+                      context, widget.restaurant.rating.toString(), "star"),
+                ),
                 Expanded(
-                    child: _detaiRatingCity(
-                        context, widget.restaurant.city, "city")),
+                  child:
+                      _detaiRatingCity(context, widget.restaurant.city, "city"),
+                ),
               ],
             ),
           )
@@ -170,28 +196,35 @@ class _DetailListState extends State<DetailList> {
   Widget _menuTitle(BuildContext context, String menu) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Text(menu, style: Theme.of(context).textTheme.headline6),
+      child: Text(
+        menu,
+        style: Theme.of(context).textTheme.headline6,
+      ),
     );
   }
 
   Widget _detailMenu(BuildContext context, menu, String s) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        height: 110,
-        alignment: Alignment.center,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                    child: Image.asset(s, fit: BoxFit.cover))),
-            Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(menu),
-                )),
-          ],
-        ));
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      height: 110,
+      alignment: Alignment.center,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+              child: Image.asset(s, fit: BoxFit.cover),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(menu),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

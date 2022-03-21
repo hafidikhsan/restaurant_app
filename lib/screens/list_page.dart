@@ -14,11 +14,16 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
+    return PlatformWidget(
+      androidBuilder: _buildAndroid,
+      iosBuilder: _buildIos,
+    );
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return const Scaffold(body: RestaurantList());
+    return const Scaffold(
+      body: RestaurantList(),
+    );
   }
 
   Widget _buildIos(BuildContext context) {

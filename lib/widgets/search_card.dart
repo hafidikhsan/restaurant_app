@@ -11,25 +11,34 @@ class SearchCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         clipBehavior: Clip.antiAlias,
         elevation: 10,
         child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              Navigator.pushNamed(context, DetailPage.routeName,
-                  arguments: restaurants);
-            },
-            child: SizedBox(
-              width: 300.0,
-              height: 120.0,
-              child: Row(
-                children: <Widget>[
-                  Expanded(flex: 4, child: _customImage(context)),
-                  Expanded(flex: 8, child: _customDescription(context)),
-                ],
-              ),
-            )),
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () {
+            Navigator.pushNamed(context, DetailPage.routeName,
+                arguments: restaurants);
+          },
+          child: SizedBox(
+            width: 300.0,
+            height: 120.0,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: _customImage(context),
+                ),
+                Expanded(
+                  flex: 8,
+                  child: _customDescription(context),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -37,8 +46,11 @@ class SearchCard extends StatelessWidget {
   Widget _customImage(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(restaurants.pictureId), fit: BoxFit.cover)),
+        image: DecorationImage(
+          image: NetworkImage(restaurants.pictureId),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
@@ -57,10 +69,12 @@ class SearchCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(restaurants.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline6),
+                    Text(
+                      restaurants.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                     Row(
                       children: [
                         const Icon(
@@ -79,10 +93,12 @@ class SearchCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(restaurants.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption),
+                Text(
+                  restaurants.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ],
             ),
           ),

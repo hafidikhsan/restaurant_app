@@ -33,63 +33,69 @@ class _SearchListState extends State<SearchList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Restaurant>>(
-        future: loadProduct(),
-        builder: (context, snapshot) {
-          final data = snapshot.data;
-          if (snapshot.hasData) {
-            rows = data!;
-          } else if (snapshot.hasError) {
-            (defaultTargetPlatform == TargetPlatform.android)
-                ? _alertDataAndroid(
-                    context, 'Aduh, Restoran yang kamu cari tidak ada')
-                : _alertIos(context, 'Aduh, Restoran yang kamu cari tidak ada');
-          }
-          return CustomScrollView(
-            slivers: <Widget>[
-              _appBar(context),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                        hintText: 'Restoran favoritmu...'),
-                    onSubmitted: (value) {
-                      setState(() {
+      future: loadProduct(),
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+        if (snapshot.hasData) {
+          rows = data!;
+        } else if (snapshot.hasError) {
+          (defaultTargetPlatform == TargetPlatform.android)
+              ? _alertDataAndroid(
+                  context, 'Aduh, Restoran yang kamu cari tidak ada')
+              : _alertIos(context, 'Aduh, Restoran yang kamu cari tidak ada');
+        }
+        return CustomScrollView(
+          slivers: <Widget>[
+            _appBar(context),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: _controller,
+                  decoration:
+                      const InputDecoration(hintText: 'Restoran favoritmu...'),
+                  onSubmitted: (value) {
+                    setState(
+                      () {
                         queryKey = value;
                         setResults(queryKey);
-                      });
-                    },
-                  ),
+                      },
+                    );
+                  },
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 5.0),
-                  child: Text("Hasil Pencarian",
-                      style: Theme.of(context).textTheme.headline5),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                child: Text(
+                  "Hasil Pencarian",
+                  style: Theme.of(context).textTheme.headline5,
                 ),
               ),
-              (results.isEmpty)
-                  ? _listData(context, rows)
-                  : _listData(context, results)
-            ],
-          );
-        });
+            ),
+            (results.isEmpty)
+                ? _listData(context, rows)
+                : _listData(context, results)
+          ],
+        );
+      },
+    );
   }
 
   Widget _listData(BuildContext context, List<Restaurant> dataList) {
     return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
-        final restaurantsData = dataList[index];
-        return SearchCard(
-          restaurants: restaurantsData,
-        );
-      },
-      childCount: dataList.length,
-    ));
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final restaurantsData = dataList[index];
+          return SearchCard(
+            restaurants: restaurantsData,
+          );
+        },
+        childCount: dataList.length,
+      ),
+    );
   }
 
   Widget _appBar(BuildContext context) {
@@ -99,14 +105,17 @@ class _SearchListState extends State<SearchList> {
       title: const Text("Pencarian"),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-              Color.fromARGB(255, 42, 66, 131),
-              Color.fromARGB(255, 30, 47, 92)
-            ]))),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 42, 66, 131),
+                Color.fromARGB(255, 30, 47, 92),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -134,7 +143,8 @@ class _SearchListState extends State<SearchList> {
       builder: (context) {
         return AlertDialog(
           title: const Center(
-              child: Icon(Icons.sentiment_very_dissatisfied, size: 50.0)),
+            child: Icon(Icons.sentiment_very_dissatisfied, size: 50.0),
+          ),
           content: Text(s),
           actions: [
             TextButton(
@@ -156,7 +166,8 @@ class _SearchListState extends State<SearchList> {
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Center(
-              child: Icon(CupertinoIcons.multiply_circle_fill, size: 50.0)),
+            child: Icon(CupertinoIcons.multiply_circle_fill, size: 50.0),
+          ),
           content: Text(s),
           actions: [
             CupertinoDialogAction(

@@ -14,11 +14,16 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
+    return PlatformWidget(
+      androidBuilder: _buildAndroid,
+      iosBuilder: _buildIos,
+    );
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return const Scaffold(body: SearchList());
+    return const Scaffold(
+      body: SearchList(),
+    );
   }
 
   Widget _buildIos(BuildContext context) {
