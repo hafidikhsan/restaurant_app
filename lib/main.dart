@@ -6,7 +6,9 @@ import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/styles/styles.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,15 +31,15 @@ class MyApp extends StatelessWidget {
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.grey,
         ),
-        //platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (context) => const HomePage(),
         SearchPage.routeName: (context) => const SearchPage(),
         DetailPage.routeName: (context) => DetailPage(
-            restaurants:
-                ModalRoute.of(context)?.settings.arguments as Restaurant)
+              restaurants:
+                  ModalRoute.of(context)?.settings.arguments as Restaurant,
+            ),
       },
     );
   }

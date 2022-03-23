@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ShortProvider with ChangeNotifier {
-  bool _short = false;
+  String _queryKey = '';
 
-  bool get short => _short;
+  String get queryKey => _queryKey;
 
-  set short(bool index) {
-    _short = index;
+  set queryKey(String value) {
+    _queryKey = value;
     notifyListeners();
   }
 }

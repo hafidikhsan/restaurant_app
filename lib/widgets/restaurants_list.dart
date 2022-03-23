@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/screens/error_page.dart';
+import 'package:restaurant_app/widgets/app_bar.dart';
 import 'package:restaurant_app/widgets/custom_card_home.dart';
 import 'package:restaurant_app/providers/restaurants_provider.dart';
+import 'package:restaurant_app/widgets/internet_widget.dart';
 
 class RestaurantList extends StatefulWidget {
   const RestaurantList({Key? key}) : super(key: key);
@@ -11,20 +14,45 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantListState extends State<RestaurantList> {
-  bool _short = false;
-
   @override
   Widget build(BuildContext context) {
+    return InternetCheck(
+      onlineBuilder: _internetConnected,
+      offlineBuilder: _internetDisconnected,
+    );
+  }
+
+  Widget _internetConnected(BuildContext context) {
     return Consumer<RestaurantsProvider>(
       builder: (context, state, _) {
         if (state.state == ResultState.loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return const CustomScrollView(
+            slivers: <Widget>[
+              CustomAppBar(
+                titlePage: 'Restaurant App',
+                floatingValue: true,
+                centerTitleValue: false,
+                pinnedValue: false,
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ],
           );
         } else if (state.state == ResultState.hasData) {
           return CustomScrollView(
             slivers: <Widget>[
-              _appBar(context),
+              const CustomAppBar(
+                titlePage: 'Restaurant App',
+                floatingValue: true,
+                centerTitleValue: false,
+                pinnedValue: false,
+              ),
               SliverToBoxAdapter(
                 child: _title(context),
               ),
@@ -34,9 +62,10 @@ class _RestaurantListState extends State<RestaurantList> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    (_short)
-                        ? state.result.restaurants
-                            .sort(((a, b) => b.rating.compareTo(a.rating)))
+                    (state.short)
+                        ? state.result.restaurants.sort(
+                            ((a, b) => b.rating.compareTo(a.rating)),
+                          )
                         : state.result.restaurants[index];
                     var restaurantsData = state.result.restaurants[index];
                     return CustomCardHome(
@@ -49,75 +78,88 @@ class _RestaurantListState extends State<RestaurantList> {
             ],
           );
         } else if (state.state == ResultState.noData) {
-          return SliverToBoxAdapter(child: Center(child: Text(state.message)));
+          return const ErrorPage(
+            image: Icons.sentiment_very_dissatisfied,
+            massage: "Maaf Data tidak ditemukan",
+            title: "Restaurant App",
+          );
         } else if (state.state == ResultState.error) {
-          return SliverToBoxAdapter(child: Center(child: Text(state.message)));
+          return const ErrorPage(
+            image: Icons.sentiment_dissatisfied,
+            massage: "Maaf terjadi error dengan server",
+            title: "Restaurant App",
+          );
         } else {
-          return const SliverToBoxAdapter(child: Center(child: Text('')));
+          return const ErrorPage(
+            image: Icons.refresh,
+            massage: "Maaf terjadi error, refresh kembali halaman",
+            title: "Restaurant App",
+          );
         }
       },
     );
   }
 
-  Widget _shortButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10.0,
-      ),
-      child: SizedBox(
-        height: 40.0,
-        child: OutlinedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-            ),
-          ),
-          onPressed: () {
-            print(_short);
-            setState(
-              () {
-                _short = !_short;
-              },
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Icon(
-                Icons.filter_list,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text('Urutkan Rating'),
-              ),
-            ],
-          ),
-        ),
-      ),
+  Widget _internetDisconnected(BuildContext context) {
+    return const ErrorPage(
+      image: Icons.wifi_off,
+      massage: "Aduh, Koneksi internet mati!",
+      title: "Restaurant App",
     );
   }
 
-  Widget _appBar(BuildContext context) {
-    return SliverAppBar(
-      centerTitle: false,
-      floating: true,
-      title: const Text("Restaurant App"),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 42, 66, 131),
-                Color.fromARGB(255, 30, 47, 92),
-              ],
+  Widget _shortButton(BuildContext context) {
+    return Consumer<RestaurantsProvider>(
+      builder: (context, state, _) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15.0,
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: 200.0,
+              child: OutlinedButton(
+                style: ButtonStyle(
+                  backgroundColor: (state.short)
+                      ? MaterialStateProperty.all(
+                          const Color.fromARGB(255, 42, 66, 131),
+                        )
+                      : null,
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  state.short = !state.short;
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter_list,
+                      color: state.color,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10.0,
+                      ),
+                      child: Text(
+                        'Urutkan Rating',
+                        style: TextStyle(
+                          color: state.color,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -138,11 +180,23 @@ class _RestaurantListState extends State<RestaurantList> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _titleText(context, "Selamat Datang", "headline5"),
-          _titleText(context, "Hafid Ikhsan Arifin", "headline4"),
+          _titleText(
+            context,
+            "Selamat Datang",
+            "headline5",
+          ),
+          _titleText(
+            context,
+            "Hafid Ikhsan Arifin",
+            "headline4",
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 15.0),
-            child: _titleText(context, "Makan apa hari ini?", "subtitle1"),
+            child: _titleText(
+              context,
+              "Makan apa hari ini?",
+              "subtitle1",
+            ),
           ),
         ],
       ),

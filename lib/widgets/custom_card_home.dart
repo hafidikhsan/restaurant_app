@@ -6,7 +6,10 @@ import 'package:restaurant_app/models/api/restaurant.dart';
 class CustomCardHome extends StatelessWidget {
   final Restaurant restaurants;
 
-  const CustomCardHome({Key? key, required this.restaurants}) : super(key: key);
+  const CustomCardHome({
+    Key? key,
+    required this.restaurants,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,8 @@ class CustomCardHome extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
-              "https://restaurant-api.dicoding.dev/images/small/${restaurants.pictureId}"),
+            "https://restaurant-api.dicoding.dev/images/small/${restaurants.pictureId}",
+          ),
           fit: BoxFit.cover,
         ),
       ),

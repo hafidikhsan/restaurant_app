@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/models/restaurant.dart';
-import 'package:restaurant_app/services/restaurant_service.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/providers/search_provider.dart';
+import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/search_card.dart';
 
 class SearchList extends StatefulWidget {
@@ -13,10 +12,8 @@ class SearchList extends StatefulWidget {
 }
 
 class _SearchListState extends State<SearchList> {
-  late List<Restaurant> results = [];
   late TextEditingController _controller;
   String queryKey = '';
-  List<Restaurant> rows = [];
 
   @override
   void initState() {
@@ -32,75 +29,153 @@ class _SearchListState extends State<SearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Restaurant>>(
-      future: loadProduct(),
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        if (snapshot.hasData) {
-          rows = data!;
-        } else if (snapshot.hasError) {
-          (defaultTargetPlatform == TargetPlatform.android)
-              ? _alertDataAndroid(
-                  context,
-                  'Aduh, Restoran yang kamu cari tidak ada',
-                )
-              : _alertIos(
-                  context,
-                  'Aduh, Restoran yang kamu cari tidak ada',
-                );
-        }
-        return CustomScrollView(
-          slivers: <Widget>[
-            _appBar(context),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: TextField(
-                  controller: _controller,
-                  decoration:
-                      const InputDecoration(hintText: 'Restoran favoritmu...'),
-                  onSubmitted: (value) {
-                    setState(
-                      () {
-                        queryKey = value;
-                        setResults(queryKey);
-                      },
-                    );
+    return ChangeNotifierProvider(
+      create: (_) => SearchProvider(
+        apiServices: ApiServices(),
+        valueKey: queryKey,
+      ),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          _appBar(context),
+          _textInput(context),
+          (queryKey == '') ? const SliverToBoxAdapter() : _title(context),
+          (queryKey == '')
+              ? _find(context)
+              : Consumer<SearchProvider>(
+                  builder: (context, state, _) {
+                    if (state.state == ResultState.loading) {
+                      return const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (state.state == ResultState.hasData) {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            var restaurantsData =
+                                state.result.restaurants[index];
+                            return SearchCard(
+                              restaurants: restaurantsData,
+                            );
+                          },
+                          childCount: state.result.restaurants.length,
+                        ),
+                      );
+                    } else if (state.state == ResultState.noData) {
+                      return _error(
+                        context,
+                        "Aduh Restoran atau Menu favoritmu tidak ada",
+                        Icons.sentiment_very_dissatisfied,
+                      );
+                    } else if (state.state == ResultState.error) {
+                      return _error(
+                        context,
+                        "Maaf terjadi error dengan server",
+                        Icons.sentiment_dissatisfied,
+                      );
+                    } else {
+                      return _error(
+                        context,
+                        "Maaf terjadi error, refresh kembali halaman",
+                        Icons.refresh,
+                      );
+                    }
                   },
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                  vertical: 5.0,
-                ),
-                child: Text(
-                  "Hasil Pencarian",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ),
-            ),
-            (results.isEmpty)
-                ? _listData(context, rows)
-                : _listData(context, results)
-          ],
-        );
-      },
+                )
+        ],
+      ),
     );
   }
 
-  Widget _listData(BuildContext context, List<Restaurant> dataList) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final restaurantsData = dataList[index];
-          return SearchCard(
-            restaurants: restaurantsData,
-          );
-        },
-        childCount: dataList.length,
+  Widget _error(BuildContext context, String s, IconData image) {
+    var screenSize = MediaQuery.of(context).size;
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: screenSize.height * 0.6,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                image,
+                size: 100.0,
+                color: const Color.fromARGB(255, 42, 66, 131),
+              ),
+              Text(
+                s,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textInput(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Consumer<SearchProvider>(
+          builder: (context, state, _) {
+            return TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                hintText: 'Restoran atau Menu favoritmu...',
+              ),
+              onSubmitted: (newValue) {
+                state.queryKey = newValue;
+                setState(
+                  () {
+                    queryKey = newValue;
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _find(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: screenSize.height * 0.8,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.restaurant,
+                size: 100.0,
+                color: Color.fromARGB(255, 42, 66, 131),
+              ),
+              Text(
+                "Makan apa kamu hari ini ?",
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _title(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15.0,
+          vertical: 5.0,
+        ),
+        child: Text(
+          "Hasil Pencarian",
+          style: Theme.of(context).textTheme.headline5,
+        ),
       ),
     );
   }
@@ -124,78 +199,6 @@ class _SearchListState extends State<SearchList> {
           ),
         ),
       ),
-    );
-  }
-
-  void setResults(String query) {
-    results = rows
-        .where((elem) =>
-            elem.name.toString().toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    if (results.isEmpty) {
-      (defaultTargetPlatform == TargetPlatform.android)
-          ? _alertDataAndroid(
-              context,
-              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya',
-            )
-          : _alertIos(
-              context,
-              'Aduh, Restoran yang kamu cari tidak ada. Cari restoran favoritmu lainnya',
-            );
-    }
-  }
-
-  void _alertDataAndroid(
-    BuildContext context,
-    String s,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Center(
-            child: Icon(
-              Icons.sentiment_very_dissatisfied,
-              size: 50.0,
-            ),
-          ),
-          content: Text(s),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _alertIos(BuildContext context, String s) {
-    showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Center(
-            child: Icon(
-              CupertinoIcons.multiply_circle_fill,
-              size: 50.0,
-            ),
-          ),
-          content: Text(s),
-          actions: [
-            CupertinoDialogAction(
-              child: const Text('Ok'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

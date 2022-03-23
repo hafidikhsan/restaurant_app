@@ -2,44 +2,42 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/services/api_service.dart';
-import 'package:restaurant_app/models/api/restaurants.dart';
+import 'package:restaurant_app/models/api/find_restaurants.dart';
 
 enum ResultState { loading, noData, hasData, error }
 
-class RestaurantsProvider extends ChangeNotifier {
+class SearchProvider extends ChangeNotifier {
   final ApiServices apiServices;
+  String valueKey;
 
-  RestaurantsProvider({required this.apiServices}) {
-    _fetchAllRestaurants();
+  SearchProvider({required this.apiServices, required this.valueKey}) {
+    _fetchRestaurant();
   }
 
-  late Restaurants _restaurantsResult;
+  late FindRestaurant _restaurantsResult;
   late ResultState _resultState;
   String _message = '';
-  bool _short = false;
+  String _queryKey = '';
+
+  String get queryKey => _queryKey;
 
   String get message => _message;
 
-  bool get short => _short;
-
-  Restaurants get result => _restaurantsResult;
+  FindRestaurant get result => _restaurantsResult;
 
   ResultState get state => _resultState;
 
-  set short(bool value) {
-    _short = value;
+  set queryKey(String value) {
+    _queryKey = value;
     notifyListeners();
-    _fetchAllRestaurants();
+    _fetchRestaurant();
   }
 
-  Color get color =>
-      (_short) ? Colors.white : const Color.fromARGB(255, 42, 66, 131);
-
-  Future<dynamic> _fetchAllRestaurants() async {
+  Future<dynamic> _fetchRestaurant() async {
     try {
       _resultState = ResultState.loading;
       notifyListeners();
-      final restaurants = await apiServices.restaurantsList();
+      final restaurants = await apiServices.findList(_queryKey);
       if (restaurants.restaurants.isEmpty) {
         _resultState = ResultState.noData;
         notifyListeners();

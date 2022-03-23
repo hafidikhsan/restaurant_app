@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/bottom_navigation.dart';
 import 'package:restaurant_app/screens/search_page.dart';
-import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
-import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/screens/list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,22 +20,21 @@ class _HomePageState extends State<HomePage> {
   static const String _homeTitle = 'Home';
 
   final List<Widget> _listWidget = [
-    ChangeNotifierProvider(
-      create: (_) => RestaurantsProvider(
-        apiServices: ApiServices(),
-      ),
-      child: const ListPage(),
-    ),
+    const ListPage(),
     const SearchPage(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.home : Icons.home_filled),
+      icon: Icon(
+        Platform.isIOS ? CupertinoIcons.home : Icons.home_filled,
+      ),
       label: _homeTitle,
     ),
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.search : Icons.search),
+      icon: Icon(
+        Platform.isIOS ? CupertinoIcons.search : Icons.search,
+      ),
       label: "Pencarian",
     ),
   ];

@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/detail_provider.dart';
+import 'package:restaurant_app/screens/error_page.dart';
+import 'package:restaurant_app/widgets/internet_widget.dart';
 
 class DetailList extends StatefulWidget {
   const DetailList({Key? key}) : super(key: key);
@@ -15,13 +17,23 @@ class _DetailListState extends State<DetailList> {
 
   @override
   Widget build(BuildContext context) {
+    return InternetCheck(
+      onlineBuilder: _internetConnected,
+      offlineBuilder: _internetDisconnected,
+    );
+  }
+
+  Widget _internetConnected(BuildContext context) {
     return Consumer<RestaurantsDetailProvider>(
       builder: (context, state, _) {
         if (state.state == ResultState.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         } else if (state.state == ResultState.hasData) {
           final drinkList = state.result.restaurant.menus.drinks.length;
           final foodList = state.result.restaurant.menus.foods.length;
+          final reviewList = state.result.restaurant.customerReviews.length;
 
           return CustomScrollView(
             slivers: <Widget>[
@@ -52,10 +64,14 @@ class _DetailListState extends State<DetailList> {
                             ? Hero(
                                 tag: state.result.restaurant.pictureId,
                                 child: _detailHero(
-                                    context, state.result.restaurant.pictureId),
+                                  context,
+                                  state.result.restaurant.pictureId,
+                                ),
                               )
                             : _detailHero(
-                                context, state.result.restaurant.pictureId),
+                                context,
+                                state.result.restaurant.pictureId,
+                              ),
                   ),
                 ),
               ),
@@ -66,6 +82,22 @@ class _DetailListState extends State<DetailList> {
                     state.result.restaurant.name,
                     state.result.restaurant.rating,
                     state.result.restaurant.city),
+              ),
+              SliverToBoxAdapter(
+                child: _menuTitle(context, "Review"),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return _detailReview(
+                      context,
+                      state.result.restaurant.customerReviews[index].name,
+                      state.result.restaurant.customerReviews[index].review,
+                      state.result.restaurant.customerReviews[index].date,
+                    );
+                  },
+                  childCount: reviewList,
+                ),
               ),
               SliverToBoxAdapter(
                 child: _menuTitle(context, "Foods"),
@@ -103,13 +135,33 @@ class _DetailListState extends State<DetailList> {
             ],
           );
         } else if (state.state == ResultState.noData) {
-          return Center(child: Text(state.message));
+          return const ErrorPage(
+            image: Icons.sentiment_very_dissatisfied,
+            massage: "Maaf Data tidak ditemukan",
+            title: "Restaurant Detail",
+          );
         } else if (state.state == ResultState.error) {
-          return Center(child: Text(state.message));
+          return const ErrorPage(
+            image: Icons.sentiment_dissatisfied,
+            massage: "Maaf terjadi error dengan server",
+            title: "Restaurant Detail",
+          );
         } else {
-          return const Center(child: Text(''));
+          return const ErrorPage(
+            image: Icons.refresh,
+            massage: "Maaf terjadi error, refresh kembali halaman",
+            title: "Restaurant Detail",
+          );
         }
       },
+    );
+  }
+
+  Widget _internetDisconnected(BuildContext context) {
+    return const ErrorPage(
+      image: Icons.wifi_off,
+      massage: "Aduh, Koneksi internet mati!",
+      title: "Retaurant Detail",
     );
   }
 
@@ -118,7 +170,7 @@ class _DetailListState extends State<DetailList> {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
-              "https://restaurant-api.dicoding.dev/images/small/${pictId}"),
+              "https://restaurant-api.dicoding.dev/images/small/$pictId"),
           fit: BoxFit.cover,
         ),
       ),
@@ -173,13 +225,17 @@ class _DetailListState extends State<DetailList> {
                       ? Text(
                           "Sembunyikan",
                           style: Theme.of(context).textTheme.caption!.merge(
-                                const TextStyle(color: Colors.blue),
+                                const TextStyle(
+                                  color: Colors.blue,
+                                ),
                               ),
                         )
                       : Text(
                           "Selengkapnya",
                           style: Theme.of(context).textTheme.caption!.merge(
-                                const TextStyle(color: Colors.blue),
+                                const TextStyle(
+                                  color: Colors.blue,
+                                ),
                               ),
                         ),
                 ),
@@ -265,6 +321,74 @@ class _DetailListState extends State<DetailList> {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(menu),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _detailReview(
+    BuildContext context,
+    String name,
+    String review,
+    String date,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15.0,
+      ),
+      height: 100.0,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(30.0),
+                ),
+                child: Image.network(
+                  "https://i.pinimg.com/474x/65/25/a0/6525a08f1df98a2e3a545fe2ace4be47.jpg",
+                  width: 70.0,
+                  height: 70.0,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        date,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      review,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

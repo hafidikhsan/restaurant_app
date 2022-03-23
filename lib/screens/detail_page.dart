@@ -12,7 +12,10 @@ class DetailPage extends StatefulWidget {
 
   final Restaurant restaurants;
 
-  const DetailPage({Key? key, required this.restaurants}) : super(key: key);
+  const DetailPage({
+    Key? key,
+    required this.restaurants,
+  }) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();

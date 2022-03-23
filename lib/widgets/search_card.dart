@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
-import 'package:restaurant_app/models/restaurant.dart';
+import 'package:restaurant_app/models/api/restaurant.dart';
 
 class SearchCard extends StatelessWidget {
   final Restaurant restaurants;
@@ -22,8 +22,11 @@ class SearchCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            Navigator.pushNamed(context, DetailPage.routeName,
-                arguments: restaurants);
+            Navigator.pushNamed(
+              context,
+              DetailPage.routeName,
+              arguments: restaurants,
+            );
           },
           child: SizedBox(
             width: 300.0,
@@ -50,7 +53,9 @@ class SearchCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(restaurants.pictureId),
+          image: NetworkImage(
+            "https://restaurant-api.dicoding.dev/images/small/${restaurants.pictureId}",
+          ),
           fit: BoxFit.cover,
         ),
       ),
@@ -85,7 +90,9 @@ class SearchCard extends StatelessWidget {
                           size: 18.0,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
+                          padding: const EdgeInsets.only(
+                            left: 5.0,
+                          ),
                           child: Text(
                             restaurants.city,
                             maxLines: 1,
