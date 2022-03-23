@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/models/api/restaurants.dart';

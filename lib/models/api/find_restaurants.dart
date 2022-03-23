@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:restaurant_app/models/api/restaurant.dart';
 
-FindRestaurant findRestaurantFromJson(String str) =>
-    FindRestaurant.fromJson(json.decode(str));
-
-String findRestaurantToJson(FindRestaurant data) => json.encode(data.toJson());
+FindRestaurant findRestaurantFromJson(String str) => FindRestaurant.fromJson(
+      json.decode(str),
+    );
 
 class FindRestaurant {
   FindRestaurant({
@@ -21,12 +20,9 @@ class FindRestaurant {
         error: json["error"],
         founded: json["founded"],
         restaurants: List<Restaurant>.from(
-            json["restaurants"].map((x) => Restaurant.fromJson(x))),
+          json["restaurants"].map(
+            (x) => Restaurant.fromJson(x),
+          ),
+        ),
       );
-
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "founded": founded,
-        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
-      };
 }

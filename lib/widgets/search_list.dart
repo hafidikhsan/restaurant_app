@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/search_provider.dart';
 import 'package:restaurant_app/services/api_service.dart';
+import 'package:restaurant_app/widgets/app_bar.dart';
 import 'package:restaurant_app/widgets/search_card.dart';
 
 class SearchList extends StatefulWidget {
@@ -36,7 +37,12 @@ class _SearchListState extends State<SearchList> {
       ),
       child: CustomScrollView(
         slivers: <Widget>[
-          _appBar(context),
+          const CustomAppBar(
+            titlePage: 'Pencarian',
+            floatingValue: false,
+            centerTitleValue: false,
+            pinnedValue: true,
+          ),
           _textInput(context),
           (queryKey == '') ? const SliverToBoxAdapter() : _title(context),
           (queryKey == '')
@@ -175,28 +181,6 @@ class _SearchListState extends State<SearchList> {
         child: Text(
           "Hasil Pencarian",
           style: Theme.of(context).textTheme.headline5,
-        ),
-      ),
-    );
-  }
-
-  Widget _appBar(BuildContext context) {
-    return SliverAppBar(
-      centerTitle: false,
-      pinned: true,
-      title: const Text("Pencarian"),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 42, 66, 131),
-                Color.fromARGB(255, 30, 47, 92),
-              ],
-            ),
-          ),
         ),
       ),
     );

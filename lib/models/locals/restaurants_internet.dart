@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:restaurant_app/models/restaurant_internet.dart';
+import 'package:restaurant_app/models/locals/restaurant_internet.dart';
 
 Restaurants restaurantsFromJson(String str) =>
     Restaurants.fromJson(json.decode(str));

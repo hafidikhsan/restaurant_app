@@ -23,14 +23,17 @@ class _InternetCheckState extends State<InternetCheck> {
   void initState() {
     super.initState();
 
-    internetSubscription =
-        InternetConnectionChecker().onStatusChange.listen((event) {
-      final hasInternets = event == InternetConnectionStatus.connected;
+    internetSubscription = InternetConnectionChecker().onStatusChange.listen(
+      (event) {
+        final hasInternets = event == InternetConnectionStatus.connected;
 
-      setState(() {
-        hasInternet = hasInternets;
-      });
-    });
+        setState(
+          () {
+            hasInternet = hasInternets;
+          },
+        );
+      },
+    );
   }
 
   @override

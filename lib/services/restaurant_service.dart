@@ -1,7 +1,7 @@
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:restaurant_app/models/restaurant.dart';
-import '../models/restaurants.dart';
+import 'package:restaurant_app/models/locals/restaurants.dart';
+import 'package:restaurant_app/models/locals/restaurant.dart';
 
 Future<String> _loadRestaurantAssets() async {
   return await rootBundle.loadString('assets/local_restaurant.json');

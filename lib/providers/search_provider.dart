@@ -10,7 +10,10 @@ class SearchProvider extends ChangeNotifier {
   final ApiServices apiServices;
   String valueKey;
 
-  SearchProvider({required this.apiServices, required this.valueKey}) {
+  SearchProvider({
+    required this.apiServices,
+    required this.valueKey,
+  }) {
     _fetchRestaurant();
   }
 
