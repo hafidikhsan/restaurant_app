@@ -37,6 +37,7 @@ class ErrorPage extends StatelessWidget {
                   ),
                   Text(
                     massage,
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ],

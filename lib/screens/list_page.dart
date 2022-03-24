@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/database/database_helper.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
@@ -18,10 +20,19 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => RestaurantsProvider(
-        apiServices: ApiServices(),
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RestaurantsProvider(
+            apiServices: ApiServices(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DatabaseProvider(
+            databaseHelper: DatabaseHelper(),
+          ),
+        ),
+      ],
       child: PlatformWidget(
         androidBuilder: _buildAndroid,
         iosBuilder: _buildIos,

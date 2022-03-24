@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/database/database_helper.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
+import 'package:restaurant_app/widgets/favorite_list.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
 import 'package:restaurant_app/widgets/search_list.dart';
 
@@ -15,18 +19,18 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
+    return ChangeNotifierProvider(
+      create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+      child: PlatformWidget(
+        androidBuilder: _buildAndroid,
+        iosBuilder: _buildIos,
+      ),
     );
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Favorite"),
-      ),
-      body: Container(),
+    return const Scaffold(
+      body: FavoriteList(),
     );
   }
 
@@ -35,7 +39,7 @@ class _FavoritePageState extends State<FavoritePage> {
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
       ),
-      child: SearchList(),
+      child: FavoriteList(),
     );
   }
 }

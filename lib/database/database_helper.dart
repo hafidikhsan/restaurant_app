@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _instance;
-  static late Database _database;
+  static Database? _database;
 
   DatabaseHelper._internal() {
     _instance = this;
@@ -27,7 +27,7 @@ class DatabaseHelper {
              description TEXT,
              pictureId TEXT,
              city TEXT,
-             rating REAL,
+             rating REAL
            )     
         ''');
       },
