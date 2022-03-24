@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/api/restaurant.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
+import 'package:restaurant_app/screens/favorite_page.dart';
 import 'package:restaurant_app/screens/home_page.dart';
 import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/styles/styles.dart';
@@ -31,11 +32,13 @@ class MyApp extends StatelessWidget {
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.grey,
         ),
+        //platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {
         HomePage.routeName: (context) => const HomePage(),
         SearchPage.routeName: (context) => const SearchPage(),
+        FavoritePage.routeName: (context) => const FavoritePage(),
         DetailPage.routeName: (context) => DetailPage(
               restaurants:
                   ModalRoute.of(context)?.settings.arguments as Restaurant,
