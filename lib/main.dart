@@ -4,6 +4,7 @@ import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/screens/favorite_page.dart';
 import 'package:restaurant_app/screens/home_page.dart';
 import 'package:restaurant_app/screens/search_page.dart';
+import 'package:restaurant_app/screens/setting_page.dart';
 import 'package:restaurant_app/styles/styles.dart';
 
 void main() {
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HomePage.routeName: (context) => const HomePage(),
         SearchPage.routeName: (context) => const SearchPage(),
+        SettingPage.routeName: (context) => const SettingPage(),
         FavoritePage.routeName: (context) => const FavoritePage(),
         DetailPage.routeName: (context) => DetailPage(
               restaurants:
