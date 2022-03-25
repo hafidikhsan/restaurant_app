@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/models/api/restaurant.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
@@ -6,8 +7,15 @@ import 'package:restaurant_app/screens/home_page.dart';
 import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/screens/setting_page.dart';
 import 'package:restaurant_app/styles/styles.dart';
+import 'package:restaurant_app/services/background_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final BackgroundService _service = BackgroundService();
+
+  _service.initializeIsolate();
+  AndroidAlarmManager.initialize();
   runApp(
     const MyApp(),
   );

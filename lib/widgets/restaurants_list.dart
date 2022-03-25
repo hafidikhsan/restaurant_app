@@ -6,6 +6,8 @@ import 'package:restaurant_app/widgets/app_bar.dart';
 import 'package:restaurant_app/widgets/custom_card_home.dart';
 import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/widgets/internet_widget.dart';
+import 'package:restaurant_app/services/background_service.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 class RestaurantList extends StatefulWidget {
   const RestaurantList({Key? key}) : super(key: key);
@@ -15,6 +17,15 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantListState extends State<RestaurantList> {
+  final BackgroundService _service = BackgroundService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    port.listen((_) async => await _service.someTask());
+  }
+
   @override
   Widget build(BuildContext context) {
     return InternetCheck(
@@ -59,6 +70,9 @@ class _RestaurantListState extends State<RestaurantList> {
               ),
               SliverToBoxAdapter(
                 child: _shortButton(context),
+              ),
+              SliverToBoxAdapter(
+                child: _backgroundButton(context),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -149,6 +163,67 @@ class _RestaurantListState extends State<RestaurantList> {
                       ),
                       child: Text(
                         'Urutkan Rating',
+                        style: TextStyle(
+                          color: state.color,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _backgroundButton(BuildContext context) {
+    return Consumer<RestaurantsProvider>(
+      builder: (context, state, _) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15.0,
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: 200.0,
+              child: OutlinedButton(
+                style: ButtonStyle(
+                  backgroundColor: (state.short)
+                      ? MaterialStateProperty.all(
+                          const Color.fromARGB(255, 42, 66, 131),
+                        )
+                      : null,
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+                  await AndroidAlarmManager.oneShot(
+                    Duration(seconds: 5),
+                    1,
+                    BackgroundService.callback,
+                    exact: true,
+                    wakeup: true,
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter_list,
+                      color: state.color,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10.0,
+                      ),
+                      child: Text(
+                        'Background',
                         style: TextStyle(
                           color: state.color,
                         ),
