@@ -1,21 +1,33 @@
+import 'dart:io';
+
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:restaurant_app/models/api/restaurant.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/screens/favorite_page.dart';
 import 'package:restaurant_app/screens/home_page.dart';
 import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/screens/setting_page.dart';
+import 'package:restaurant_app/services/navigation.dart';
 import 'package:restaurant_app/styles/styles.dart';
 import 'package:restaurant_app/services/background_service.dart';
+import 'package:restaurant_app/utils/notification_helper.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final BackgroundService _service = BackgroundService();
+  final NotificationHelper _notificationHelper = NotificationHelper();
 
   _service.initializeIsolate();
-  AndroidAlarmManager.initialize();
+  if (Platform.isAndroid) {
+    await AndroidAlarmManager.initialize();
+  }
+  await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
   runApp(
     const MyApp(),
   );
@@ -29,6 +41,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Restaurant App',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: primaryColor,

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/providers/schedule_provider.dart';
+import 'package:restaurant_app/widgets/custom_dialog.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
 
 class SettingPage extends StatefulWidget {
@@ -20,18 +25,58 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  static const String settingsTitle = 'Settings';
+
   Widget _buildAndroid(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Halo")),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(settingsTitle),
+      ),
+      body: _buildList(context),
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
+    return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
+        middle: Text(settingsTitle),
       ),
-      child: Center(child: Text("Halo")),
+      child: _buildList(context),
+    );
+  }
+
+  Widget _buildList(BuildContext context) {
+    return ListView(
+      children: [
+        Material(
+          child: ListTile(
+            title: Text('Dark Theme'),
+            trailing: Switch.adaptive(
+              value: false,
+              onChanged: (value) => customDialog(context),
+            ),
+          ),
+        ),
+        Material(
+          child: ListTile(
+            title: Text('Scheduling News'),
+            trailing: Consumer<SchedulingProvider>(
+              builder: (context, scheduled, _) {
+                return Switch.adaptive(
+                  value: scheduled.isScheduled,
+                  onChanged: (value) async {
+                    if (Platform.isIOS) {
+                      customDialog(context);
+                    } else {
+                      scheduled.scheduledNews(value);
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

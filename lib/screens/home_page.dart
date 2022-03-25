@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/bottom_navigation.dart';
+import 'package:restaurant_app/providers/schedule_provider.dart';
+import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/screens/favorite_page.dart';
 import 'package:restaurant_app/screens/search_page.dart';
 import 'package:restaurant_app/screens/setting_page.dart';
+import 'package:restaurant_app/utils/notification_helper.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
 import 'package:restaurant_app/screens/list_page.dart';
 
@@ -21,11 +24,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const String _homeTitle = 'Home';
 
+  final NotificationHelper _notificationHelper = NotificationHelper();
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(DetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
+  }
+
   final List<Widget> _listWidget = [
     const ListPage(),
     const SearchPage(),
     const FavoritePage(),
-    const SettingPage(),
+    ChangeNotifierProvider<SchedulingProvider>(
+      create: (_) => SchedulingProvider(),
+      child: const SettingPage(),
+    ),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [

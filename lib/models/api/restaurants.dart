@@ -28,4 +28,11 @@ class Restaurants {
           ),
         ),
       );
+
+  Map<String, dynamic> toJson() => {
+        "error": error,
+        "message": message,
+        "count": count,
+        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+      };
 }

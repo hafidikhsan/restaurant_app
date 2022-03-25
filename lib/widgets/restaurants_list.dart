@@ -71,9 +71,6 @@ class _RestaurantListState extends State<RestaurantList> {
               SliverToBoxAdapter(
                 child: _shortButton(context),
               ),
-              SliverToBoxAdapter(
-                child: _backgroundButton(context),
-              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/screens/detail_page.dart';
 import 'package:restaurant_app/models/api/restaurant.dart';
+import 'package:restaurant_app/services/navigation.dart';
 
 class CustomCardHome extends StatelessWidget {
   final Restaurant restaurants;
@@ -34,11 +35,7 @@ class CustomCardHome extends StatelessWidget {
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    DetailPage.routeName,
-                    arguments: restaurants,
-                  );
+                  Navigation.intentWithData(DetailPage.routeName, restaurants);
                 },
                 child: SizedBox(
                   width: 300.0,
