@@ -17,15 +17,6 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantListState extends State<RestaurantList> {
-  final BackgroundService _service = BackgroundService();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    port.listen((_) async => await _service.someTask());
-  }
-
   @override
   Widget build(BuildContext context) {
     return InternetCheck(

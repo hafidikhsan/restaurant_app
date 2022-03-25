@@ -22,15 +22,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const String _homeTitle = 'Home';
+  static const String _homeTitle = 'Beranda';
 
   final NotificationHelper _notificationHelper = NotificationHelper();
 
   @override
   void initState() {
     super.initState();
-    _notificationHelper
-        .configureSelectNotificationSubject(DetailPage.routeName);
+    _notificationHelper.configureSelectNotificationSubject(
+      DetailPage.routeName,
+    );
   }
 
   @override
@@ -70,9 +71,9 @@ class _HomePageState extends State<HomePage> {
     ),
     BottomNavigationBarItem(
       icon: Icon(
-        Platform.isIOS ? CupertinoIcons.heart_fill : Icons.favorite,
+        Platform.isIOS ? CupertinoIcons.settings : Icons.settings,
       ),
-      label: "Favorite",
+      label: "Pengaturan",
     ),
   ];
 
@@ -91,6 +92,9 @@ class _HomePageState extends State<HomePage> {
         builder: (contex, bottomNavigation, _) => Scaffold(
           body: _listWidget[bottomNavigation.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 12.0,
+            iconSize: 25.0,
             currentIndex: bottomNavigation.currentIndex,
             items: _bottomNavBarItems,
             onTap: (newValue) {

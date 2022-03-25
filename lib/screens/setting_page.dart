@@ -38,7 +38,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text(settingsTitle),
       ),
       child: _buildList(context),

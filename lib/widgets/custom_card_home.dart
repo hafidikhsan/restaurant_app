@@ -118,10 +118,14 @@ class CustomCardHome extends StatelessWidget {
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      child: IconButton(
-                        icon: (isFavorite)
+                      child: GestureDetector(
+                        onTap: () => (isFavorite)
+                            ? provider.removeFavorite(restaurants.id)
+                            : provider.addFavorite(restaurants),
+                        child: (isFavorite)
                             ? const Icon(
                                 Icons.favorite,
                                 size: 26.0,
@@ -130,9 +134,6 @@ class CustomCardHome extends StatelessWidget {
                                 Icons.favorite_border_outlined,
                                 size: 26.0,
                               ),
-                        onPressed: () => (isFavorite)
-                            ? provider.removeFavorite(restaurants.id)
-                            : provider.addFavorite(restaurants),
                       ),
                     ),
                     Container(
