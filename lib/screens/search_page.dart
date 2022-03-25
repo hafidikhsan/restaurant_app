@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
-import 'package:restaurant_app/widgets/search_list.dart';
+import 'package:restaurant_app/screens/search_list_page.dart';
 
 class SearchPage extends StatefulWidget {
   static var routeName = '/search_page';

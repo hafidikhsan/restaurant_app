@@ -13,7 +13,26 @@ class FavoriteList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DatabaseProvider>(
       builder: (context, provider, child) {
-        if (provider.state == ResultState.hasData) {
+        if (provider.state == ResultState.loading) {
+          return const CustomScrollView(
+            slivers: <Widget>[
+              CustomAppBar(
+                titlePage: 'Favorite',
+                floatingValue: true,
+                centerTitleValue: false,
+                pinnedValue: false,
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else if (provider.state == ResultState.hasData) {
           return CustomScrollView(slivers: <Widget>[
             const CustomAppBar(
               titlePage: 'Favorite',

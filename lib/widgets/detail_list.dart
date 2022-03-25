@@ -1,12 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/database/database_helper.dart';
+import 'package:restaurant_app/models/api/restaurant_detail.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/providers/detail_provider.dart';
 import 'package:restaurant_app/screens/error_page.dart';
 import 'package:restaurant_app/widgets/internet_widget.dart';
+import 'package:restaurant_app/models/api/restaurant.dart' as restaurants;
 
 class DetailList extends StatefulWidget {
-  const DetailList({Key? key}) : super(key: key);
+  final restaurants.Restaurant restaurant;
+  const DetailList({Key? key, required this.restaurant}) : super(key: key);
 
   @override
   State<DetailList> createState() => _DetailListState();
@@ -17,9 +22,14 @@ class _DetailListState extends State<DetailList> {
 
   @override
   Widget build(BuildContext context) {
-    return InternetCheck(
-      onlineBuilder: _internetConnected,
-      offlineBuilder: _internetDisconnected,
+    return ChangeNotifierProvider(
+      create: (_) => DatabaseProvider(
+        databaseHelper: DatabaseHelper(),
+      ),
+      child: InternetCheck(
+        onlineBuilder: _internetConnected,
+        offlineBuilder: _internetDisconnected,
+      ),
     );
   }
 
@@ -77,11 +87,14 @@ class _DetailListState extends State<DetailList> {
               ),
               SliverToBoxAdapter(
                 child: _detailDescription(
-                    context,
-                    state.result.restaurant.description,
-                    state.result.restaurant.name,
-                    state.result.restaurant.rating,
-                    state.result.restaurant.city),
+                  context,
+                  state.result.restaurant.description,
+                  state.result.restaurant.name,
+                  state.result.restaurant.rating,
+                  state.result.restaurant.city,
+                  state.result.restaurant.id,
+                  state.result.restaurant,
+                ),
               ),
               SliverToBoxAdapter(
                 child: _menuTitle(context, "Review"),
@@ -177,96 +190,147 @@ class _DetailListState extends State<DetailList> {
     );
   }
 
-  Widget _detailDescription(BuildContext context, String description,
-      String name, double rating, String city) {
-    return Padding(
-      padding: const EdgeInsets.all(
-        15.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                ),
-                child: (_desc)
-                    ? Text(
-                        description,
-                      )
-                    : Text(
-                        description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+  Widget _detailDescription(
+      BuildContext context,
+      String description,
+      String name,
+      double rating,
+      String city,
+      String id,
+      Restaurant restaurant) {
+    return Consumer<DatabaseProvider>(
+      builder: (context, provider, _) {
+        return FutureBuilder<bool>(
+          future: provider.isFavorite(id),
+          builder: (context, snapshot) {
+            var isFavorite = snapshot.data ?? false;
+            return Padding(
+              padding: const EdgeInsets.all(
+                15.0,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(
-                      () {
-                        _desc = !_desc;
-                      },
-                    );
-                  },
-                  child: (_desc)
-                      ? Text(
-                          "Sembunyikan",
-                          style: Theme.of(context).textTheme.caption!.merge(
-                                const TextStyle(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                        )
-                      : Text(
-                          "Selengkapnya",
-                          style: Theme.of(context).textTheme.caption!.merge(
-                                const TextStyle(
-                                  color: Colors.blue,
-                                ),
-                              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15.0,
                         ),
-                ),
+                        child: (_desc)
+                            ? Text(
+                                description,
+                              )
+                            : Text(
+                                description,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15.0,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(
+                              () {
+                                _desc = !_desc;
+                              },
+                            );
+                          },
+                          child: (_desc)
+                              ? Text(
+                                  "Sembunyikan",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .merge(
+                                        const TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                )
+                              : Text(
+                                  "Selengkapnya",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .merge(
+                                        const TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 25.0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () => (isFavorite)
+                                    ? provider.removeFavorite(id)
+                                    : provider.addFavorite(widget.restaurant),
+                                child: (isFavorite)
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        size: 26.0,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_border_outlined,
+                                        size: 26.0,
+                                      ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(top: 10.0),
+                                child: Text(
+                                  "Favorite",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: _detaiRatingCity(
+                            context,
+                            rating.toString(),
+                            "star",
+                          ),
+                        ),
+                        Expanded(
+                          child: _detaiRatingCity(
+                            context,
+                            city,
+                            "city",
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 25.0,
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: _detaiRatingCity(
-                    context,
-                    rating.toString(),
-                    "star",
-                  ),
-                ),
-                Expanded(
-                  child: _detaiRatingCity(
-                    context,
-                    city,
-                    "city",
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+            );
+          },
+        );
+      },
     );
   }
 

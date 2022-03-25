@@ -57,7 +57,7 @@ class DatabaseHelper {
     await db!.insert(_tblFavorite, restaurant.toJson());
   }
 
-  Future<Map> getFavoriteByUrl(String id) async {
+  Future<Map> getFavoriteById(String id) async {
     final db = await database;
 
     List<Map<String, dynamic>> results = await db!.query(

@@ -37,17 +37,21 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return const Scaffold(
-      body: DetailList(),
+    return Scaffold(
+      body: DetailList(
+        restaurant: widget.restaurants,
+      ),
     );
   }
 
   Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
         transitionBetweenRoutes: false,
       ),
-      child: DetailList(),
+      child: DetailList(
+        restaurant: widget.restaurants,
+      ),
     );
   }
 }

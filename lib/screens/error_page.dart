@@ -35,10 +35,13 @@ class ErrorPage extends StatelessWidget {
                     size: 100.0,
                     color: const Color.fromARGB(255, 42, 66, 131),
                   ),
-                  Text(
-                    massage,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline5,
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      massage,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
                   ),
                 ],
               ),

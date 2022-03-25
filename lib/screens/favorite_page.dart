@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/database/database_helper.dart';
 import 'package:restaurant_app/providers/database_provider.dart';
-import 'package:restaurant_app/widgets/favorite_list.dart';
+import 'package:restaurant_app/screens/favorite_list_page.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
-import 'package:restaurant_app/widgets/search_list.dart';
 
 class FavoritePage extends StatefulWidget {
   static var routeName = '/favorite_page';

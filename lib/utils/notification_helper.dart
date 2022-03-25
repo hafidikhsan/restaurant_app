@@ -18,7 +18,7 @@ class NotificationHelper {
   Future<void> initNotifications(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        const AndroidInitializationSettings('app_icon');
 
     var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: false,
@@ -42,8 +42,8 @@ class NotificationHelper {
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
       Restaurants articles) async {
     var _channelId = "1";
-    var _channelName = "channel_01";
-    var _channelDescription = "dicoding news channel";
+    var _channelName = "Restaurant App";
+    var _channelDescription = "Restaurant Terlaris";
 
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         _channelId, _channelName,

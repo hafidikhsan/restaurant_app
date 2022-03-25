@@ -6,13 +6,13 @@ class CustomAppBar extends StatelessWidget {
   final bool centerTitleValue;
   final bool pinnedValue;
 
-  const CustomAppBar(
-      {Key? key,
-      required this.titlePage,
-      required this.floatingValue,
-      required this.centerTitleValue,
-      required this.pinnedValue})
-      : super(key: key);
+  const CustomAppBar({
+    Key? key,
+    required this.titlePage,
+    required this.floatingValue,
+    required this.centerTitleValue,
+    required this.pinnedValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

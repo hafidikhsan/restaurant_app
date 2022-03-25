@@ -18,6 +18,12 @@ class RestaurantListPage extends StatefulWidget {
 
 class _RestaurantListPageState extends State<RestaurantListPage> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<RestaurantsProvider>(context, listen: false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InternetCheck(
       onlineBuilder: _internetConnected,

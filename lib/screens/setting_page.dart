@@ -50,16 +50,7 @@ class _SettingPageState extends State<SettingPage> {
       children: [
         Material(
           child: ListTile(
-            title: Text('Dark Theme'),
-            trailing: Switch.adaptive(
-              value: false,
-              onChanged: (value) => customDialog(context),
-            ),
-          ),
-        ),
-        Material(
-          child: ListTile(
-            title: Text('Scheduling News'),
+            title: Text('Jadwalkan Restoran Terlaris'),
             trailing: Consumer<SchedulingProvider>(
               builder: (context, scheduled, _) {
                 return Switch.adaptive(
@@ -68,7 +59,7 @@ class _SettingPageState extends State<SettingPage> {
                     if (Platform.isIOS) {
                       customDialog(context);
                     } else {
-                      scheduled.scheduledNews(value);
+                      scheduled.scheduledRestaurants(value);
                     }
                   },
                 );
