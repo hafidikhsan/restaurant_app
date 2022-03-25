@@ -23,6 +23,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const String _homeTitle = 'Beranda';
+  static const String _searchTitle = 'Pencarian';
+  static const String _favoriteTitle = 'Favorite';
+  static const String _settingTitle = 'Pengaturan';
 
   final NotificationHelper _notificationHelper = NotificationHelper();
 
@@ -61,19 +64,19 @@ class _HomePageState extends State<HomePage> {
       icon: Icon(
         Platform.isIOS ? CupertinoIcons.search : Icons.search,
       ),
-      label: "Pencarian",
+      label: _searchTitle,
     ),
     BottomNavigationBarItem(
       icon: Icon(
         Platform.isIOS ? CupertinoIcons.heart_fill : Icons.favorite,
       ),
-      label: "Favorite",
+      label: _favoriteTitle,
     ),
     BottomNavigationBarItem(
       icon: Icon(
         Platform.isIOS ? CupertinoIcons.settings : Icons.settings,
       ),
-      label: "Pengaturan",
+      label: _settingTitle,
     ),
   ];
 

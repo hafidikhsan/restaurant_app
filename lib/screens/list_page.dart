@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app/database/database_helper.dart';
 import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/providers/restaurants_provider.dart';
+import 'package:restaurant_app/screens/restaurant_list_page.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
-import 'package:restaurant_app/widgets/restaurants_list.dart';
 
 class ListPage extends StatefulWidget {
   static var routeName = '/restaurant_list';
@@ -42,7 +42,7 @@ class _ListPageState extends State<ListPage> {
 
   Widget _buildAndroid(BuildContext context) {
     return const Scaffold(
-      body: RestaurantList(),
+      body: RestaurantListPage(),
     );
   }
 
@@ -51,7 +51,7 @@ class _ListPageState extends State<ListPage> {
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
       ),
-      child: RestaurantList(),
+      child: RestaurantListPage(),
     );
   }
 }

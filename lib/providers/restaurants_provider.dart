@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/models/api/restaurants.dart';
-import 'package:restaurant_app/providers/resutl_state.dart';
+import 'package:restaurant_app/providers/result_state.dart';
 
 class RestaurantsProvider extends ChangeNotifier {
   final ApiServices apiServices;
