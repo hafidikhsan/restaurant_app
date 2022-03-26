@@ -408,15 +408,11 @@ class _DetailListState extends State<DetailList> {
           Expanded(
             child: Center(
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(30.0),
-                ),
-                child: Image.network(
-                  "https://i.pinimg.com/474x/65/25/a0/6525a08f1df98a2e3a545fe2ace4be47.jpg",
-                  width: 70.0,
-                  height: 70.0,
-                ),
-              ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(30.0),
+                  ),
+                  child: Image.asset('assets/images/profile.png',
+                      fit: BoxFit.cover)),
             ),
           ),
           Expanded(

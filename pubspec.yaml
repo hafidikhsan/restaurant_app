@@ -41,6 +41,7 @@ flutter:
     - assets/local_restaurant.json
     - assets/images/drink.jpeg
     - assets/images/food.jpg
+    - assets/images/profile.png
 
 flutter_native_splash:
   color: "#1e2f5c"
