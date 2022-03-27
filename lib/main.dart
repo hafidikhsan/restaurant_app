@@ -54,7 +54,6 @@ class MyApp extends StatelessWidget {
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.grey,
         ),
-        //platform: TargetPlatform.iOS,
       ),
       initialRoute: HomePage.routeName,
       routes: {

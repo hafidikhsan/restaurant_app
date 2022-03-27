@@ -48,7 +48,6 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildList(BuildContext context) {
     return Consumer<SchedulingProvider>(
       builder: (context, scheduled, _) {
-        print(scheduled.isScheduled);
         return ListView(
           children: [
             Material(

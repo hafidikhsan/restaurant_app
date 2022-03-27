@@ -11,7 +11,10 @@ import 'package:restaurant_app/models/api/restaurant.dart' as restaurants;
 
 class DetailList extends StatefulWidget {
   final restaurants.Restaurant restaurant;
-  const DetailList({Key? key, required this.restaurant}) : super(key: key);
+  const DetailList({
+    Key? key,
+    required this.restaurant,
+  }) : super(key: key);
 
   @override
   State<DetailList> createState() => _DetailListState();

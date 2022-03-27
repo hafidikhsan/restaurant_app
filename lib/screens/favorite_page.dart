@@ -19,7 +19,9 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+      create: (_) => DatabaseProvider(
+        databaseHelper: DatabaseHelper(),
+      ),
       child: PlatformWidget(
         androidBuilder: _buildAndroid,
         iosBuilder: _buildIos,

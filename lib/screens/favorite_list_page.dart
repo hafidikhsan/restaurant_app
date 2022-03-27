@@ -33,25 +33,27 @@ class FavoriteList extends StatelessWidget {
             ],
           );
         } else if (provider.state == ResultState.hasData) {
-          return CustomScrollView(slivers: <Widget>[
-            const CustomAppBar(
-              titlePage: 'Favorite',
-              floatingValue: true,
-              centerTitleValue: false,
-              pinnedValue: false,
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  var restaurantsData = provider.favorite[index];
-                  return CustomCardHome(
-                    restaurants: restaurantsData,
-                  );
-                },
-                childCount: provider.favorite.length,
+          return CustomScrollView(
+            slivers: <Widget>[
+              const CustomAppBar(
+                titlePage: 'Favorite',
+                floatingValue: true,
+                centerTitleValue: false,
+                pinnedValue: false,
               ),
-            ),
-          ]);
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    var restaurantsData = provider.favorite[index];
+                    return CustomCardHome(
+                      restaurants: restaurantsData,
+                    );
+                  },
+                  childCount: provider.favorite.length,
+                ),
+              ),
+            ],
+          );
         } else {
           return const ErrorPage(
             image: Icons.sentiment_dissatisfied,
