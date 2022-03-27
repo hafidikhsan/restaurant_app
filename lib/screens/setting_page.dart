@@ -30,7 +30,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(settingsTitle),
+        title: const Text(settingsTitle),
       ),
       body: _buildList(context),
     );
@@ -46,28 +46,29 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildList(BuildContext context) {
-    return ListView(
-      children: [
-        Material(
-          child: ListTile(
-            title: Text('Jadwalkan Restoran Terlaris'),
-            trailing: Consumer<SchedulingProvider>(
-              builder: (context, scheduled, _) {
-                return Switch.adaptive(
+    return Consumer<SchedulingProvider>(
+      builder: (context, scheduled, _) {
+        print(scheduled.isScheduled);
+        return ListView(
+          children: [
+            Material(
+              child: ListTile(
+                title: const Text('Jadwalkan Restoran Terlaris'),
+                trailing: Switch.adaptive(
                   value: scheduled.isScheduled,
                   onChanged: (value) async {
                     if (Platform.isIOS) {
                       customDialog(context);
                     } else {
-                      scheduled.scheduledRestaurants(value);
+                      scheduled.isScheduled = value;
                     }
                   },
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

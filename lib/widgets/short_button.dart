@@ -18,6 +18,7 @@ class ShortButton extends StatelessWidget {
             child: SizedBox(
               width: 200.0,
               child: OutlinedButton(
+                key: const Key("shortButton"),
                 style: ButtonStyle(
                   backgroundColor: (state.short)
                       ? MaterialStateProperty.all(

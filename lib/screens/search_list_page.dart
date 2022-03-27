@@ -4,6 +4,7 @@ import 'package:restaurant_app/providers/search_provider.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/app_bar.dart';
 import 'package:restaurant_app/widgets/search_card.dart';
+import 'package:restaurant_app/providers/result_state.dart';
 
 class SearchList extends StatefulWidget {
   const SearchList({Key? key}) : super(key: key);

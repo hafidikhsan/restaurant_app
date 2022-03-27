@@ -7,14 +7,14 @@ import 'package:rxdart/subjects.dart';
 
 final selectNotificationSubject = BehaviorSubject<String>();
 
+int randomNumber = Random().nextInt(20);
+
 class NotificationHelper {
   static NotificationHelper? _instance;
 
   NotificationHelper._internal() {
     _instance = this;
   }
-
-  int randomNumber = Random().nextInt(20);
 
   factory NotificationHelper() => _instance ?? NotificationHelper._internal();
 

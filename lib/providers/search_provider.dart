@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/models/api/find_restaurants.dart';
-
-enum ResultState { loading, noData, hasData, error }
+import 'package:restaurant_app/providers/result_state.dart';
 
 class SearchProvider extends ChangeNotifier {
   final ApiServices apiServices;
