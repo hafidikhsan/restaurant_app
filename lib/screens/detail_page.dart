@@ -6,6 +6,7 @@ import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/screens/detail_list_page.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
 import 'package:restaurant_app/providers/detail_provider.dart';
+import 'package:http/http.dart' as http;
 
 class DetailPage extends StatefulWidget {
   static var routeName = '/detail_restaurant';
@@ -27,7 +28,9 @@ class _DetailPageState extends State<DetailPage> {
     return ChangeNotifierProvider<RestaurantsDetailProvider>(
       create: (_) => RestaurantsDetailProvider(
         restaurantId: widget.restaurants.id,
-        apiServices: ApiServices(),
+        apiServices: ApiServices(
+          client: http.Client(),
+        ),
       ),
       child: PlatformWidget(
         androidBuilder: _buildAndroid,

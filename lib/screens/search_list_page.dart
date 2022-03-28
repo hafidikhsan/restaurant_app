@@ -5,6 +5,7 @@ import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/app_bar.dart';
 import 'package:restaurant_app/widgets/search_card.dart';
 import 'package:restaurant_app/providers/result_state.dart';
+import 'package:http/http.dart' as http;
 
 class SearchList extends StatefulWidget {
   const SearchList({Key? key}) : super(key: key);
@@ -33,7 +34,9 @@ class _SearchListState extends State<SearchList> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => SearchProvider(
-        apiServices: ApiServices(),
+        apiServices: ApiServices(
+          client: http.Client(),
+        ),
         valueKey: queryKey,
       ),
       child: CustomScrollView(

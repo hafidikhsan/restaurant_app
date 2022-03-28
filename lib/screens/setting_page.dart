@@ -54,6 +54,7 @@ class _SettingPageState extends State<SettingPage> {
               child: ListTile(
                 title: const Text('Jadwalkan Restoran Terlaris'),
                 trailing: Switch.adaptive(
+                  key: const Key("toogleSwitch"),
                   value: scheduled.isScheduled,
                   onChanged: (value) async {
                     if (Platform.isIOS) {

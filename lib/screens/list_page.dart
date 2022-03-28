@@ -7,6 +7,7 @@ import 'package:restaurant_app/providers/restaurants_provider.dart';
 import 'package:restaurant_app/screens/restaurant_list_page.dart';
 import 'package:restaurant_app/services/api_service.dart';
 import 'package:restaurant_app/widgets/platform_widget.dart';
+import 'package:http/http.dart' as http;
 
 class ListPage extends StatefulWidget {
   static var routeName = '/restaurant_list';
@@ -24,7 +25,9 @@ class _ListPageState extends State<ListPage> {
       providers: [
         ChangeNotifierProvider(
           create: (_) => RestaurantsProvider(
-            apiServices: ApiServices(),
+            apiServices: ApiServices(
+              client: http.Client(),
+            ),
           ),
         ),
         ChangeNotifierProvider(
