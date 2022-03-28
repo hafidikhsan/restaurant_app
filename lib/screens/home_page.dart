@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     _notificationHelper.configureSelectNotificationSubject(
       DetailPage.routeName,
     );
+    SchedulingProvider();
   }
 
   @override
